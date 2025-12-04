@@ -1,15 +1,19 @@
-FROM ubuntu
+FROM ubuntu:22.04
+
+RUN userdel -r ubuntu 2>/dev/null || true
 
 # Setup tailscale
 WORKDIR /tailscale.d
 
-RUN apt update
-# Install necessary packages for Tailscale's installation script and for running Tailscale
-RUN apt-get install -y \
-    curl \
-    ca-certificates \
-    iptables \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get install -y curl ca-certificates iptables iproute2 iputils-ping openssh-server telnet sudo \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    && mkdir -p /run/sshd \
+    && chmod 755 /run/sshd \
+    && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config \
+    # Disable root login
+    && echo "PermitRootLogin no" >> /etc/ssh/sshd_config
     
 COPY start.sh /tailscale.d/start.sh
 
