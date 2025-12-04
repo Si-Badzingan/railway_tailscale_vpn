@@ -3,8 +3,9 @@ FROM ubuntu
 # Setup tailscale
 WORKDIR /tailscale.d
 
+RUN apt update
 # Install necessary packages for Tailscale's installation script and for running Tailscale
-RUN apt-get update && apt-get install -y \
+RUN apt-get install -y \
     curl \
     ca-certificates \
     iptables \
