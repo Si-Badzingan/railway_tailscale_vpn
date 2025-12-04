@@ -9,7 +9,6 @@ RUN apt-get install -y \
     curl \
     ca-certificates \
     iptables \
-    ip6tables \
     && rm -rf /var/lib/apt/lists/*
     
 COPY start.sh /tailscale.d/start.sh
